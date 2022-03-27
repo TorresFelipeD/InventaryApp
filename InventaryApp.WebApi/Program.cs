@@ -14,6 +14,7 @@ namespace InventaryApp.WebApi
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
+            Utilities.Logger.Logger.CloseAndFlush();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

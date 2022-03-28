@@ -9,8 +9,4 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.12" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\InventaryApp.Utilities\InventaryApp.Utilities.csproj" />
-  </ItemGroup>
-
 </Project>

@@ -22,6 +22,7 @@ namespace InventaryApp.WebApi
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls("https://localhost:1002/");
                 });
     }
 }

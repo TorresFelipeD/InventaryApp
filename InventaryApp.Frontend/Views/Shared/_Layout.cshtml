@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject LanguageService language
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -21,13 +22,15 @@
     <link rel="stylesheet" href="~/adminlte/dist/css/adminlte.min.css">
     <!-- flag-icon-css -->
     <link rel="stylesheet" href="~/adminlte/plugins/flag-icon-css/css/flag-icon.min.css">
+    @*Jquery DataTable*@
+    <link rel="stylesheet" href="~/adminlte/plugins/datatables/css/jquery.dataTables.min.css" />
 
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<body class="hold-transition dark-mode sidebar-mini">
+<body class="hold-transition sidebar-mini">
     <div class="wrapper">
         <!-- Preloader -->
-        <div class="preloader flex-column justify-content-center align-items-center">
+        <div class="preloader flex-column justify-content-center align-items-center dark-mode">
             <img class="animation__wobble" src="~/images/Logo2.png" alt="Logo" height="100" width="100">
         </div>
 
@@ -41,36 +44,40 @@
         <partial name="_Footer" />
     </div>
 
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <!-- jQuery -->
+    @*jQuery*@
     <script src="~/adminlte/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
+    @*jQuery UI*@
+    <script src="~/adminlte/plugins/jquery-ui/jquery-ui.min.js"></script>
+    @*Bootstrap 4*@
     <script src="~/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
+    @*AdminLTE App*@
     <script src="~/adminlte/dist/js/adminlte.min.js"></script>
+    @*Jquery DataTable*@
+    <script src="~/adminlte/plugins/datatables/js/jquery.dataTables.min.js"></script>
+    @*Sweet Alert 2*@
+    <script src="~/adminlte/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+    @*Scripst de Sitio*@
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+    @*JQuery Validate*@
+    <script src="~/adminlte/plugins/jquery-validation/jquery.validate.min.js"></script>
 
-    @await RenderSectionAsync("Scripts", required: false)
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("[data-item='Table']").DataTable({
+                pagingType: "simple_numbers",
+                language: {
+                    search: "@language.GetKey("Search"): ",
+                    paginate: {
+                        previous: "@language.GetKey("Preview")",
+                        next: "@language.GetKey("Next")"
+                    },
+                    lengthMenu: "@language.GetKey("ShowRecordsDataTable")",
+                    info: "@language.GetKey("ShowingRecordsDataTable")",
+                    infoFiltered: "@language.GetKey("InfoFilteredDataTable")"
+                }
+            });
+        });
+    </script>
+    @await RenderSectionAsync("ScriptsAfter", required: false)
 </body>
 </html>
-
-@*<header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">InventaryApp.Frontend</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>*@

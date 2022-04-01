@@ -1,11 +1,13 @@
 ﻿using InventaryApp.Utilities.Logger;
-using InventaryApp.WebApi.Models;
+using InventaryApp.Utilities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text.Json;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,17 +34,18 @@ namespace InventaryApp.WebApi.Controllers
         {
             try
             {
-                List<Role> roles = new List<Role>();
+                List<Role> roleList = new List<Role>();
+                string query = @"
+                                SELECT 
+                                    [id],
+	                                [role_guid],
+	                                [name],
+	                                [description]
+                                FROM [dbo].[Role]
+                                ";
 
                 using (SqlConnection context = new SqlConnection(connection))
                 {
-                    string query = @"
-SELECT [id]
-      ,[role_guid]
-      ,[name]
-      ,[description]
-FROM [dbo].[Role]
-;";
                     using (SqlCommand cmd = new SqlCommand(query, context))
                     {
                         context.Open();
@@ -52,20 +55,20 @@ FROM [dbo].[Role]
                             {
                                 if (reader.HasRows)
                                 {
-                                    roles.Add(new Role
-                                    {
-                                        id = int.Parse(reader["id"].ToString()),
-                                        role_guid = Guid.Parse(reader["role_guid"].ToString()),
-                                        name = reader["name"].ToString(),
-                                        description = reader["description"].ToString(),
-                                    });
+                                    var tableData = new Dictionary<string, object>();
+                                    for (int i = 0; i < reader.FieldCount; i++)
+                                        tableData.Add(reader.GetName(i), reader.GetValue(i));
+
+                                    var jsonString = JsonSerializer.Serialize(tableData);
+                                    var rolesObj = JsonSerializer.Deserialize<Role>(jsonString);
+                                    roleList.Add(rolesObj);
                                 }
                             }
                         }
                         context.Close();
                     }
                 }
-                return Ok(roles);
+                return Ok(roleList);
             }
             catch (Exception ex)
             {
@@ -74,72 +77,111 @@ FROM [dbo].[Role]
             }
         }
 
-        // GET api/<RoleController>/5
-        [HttpGet("{id}")]
-        public IActionResult Get(string id)
+        [HttpPost]
+        public IActionResult Post(Role role)
         {
             try
             {
-                Role role = new Role();
+                var query = @"
+                        INSERT INTO [dbo].[Role]
+                       ([name]
+                       ,[description])
+                        VALUES
+                       (@name
+                       ,@description)
+                        ";
 
                 using (SqlConnection context = new SqlConnection(connection))
                 {
-                    string query = @"
-SELECT [id]
-      ,[role_guid]
-      ,[name]
-      ,[description]
-FROM [dbo].[Role]
-WHERE [role_guid] = @rolguid
-;";
-                    SqlParameter roleGuid = new SqlParameter("@rolguid", SqlDbType.NVarChar);
-                    roleGuid.Value = id;
-
                     using (SqlCommand cmd = new SqlCommand(query, context))
                     {
-                        cmd.Parameters.Add(roleGuid);
+                        cmd.Parameters.AddWithValue("@name", role.name);
+                        cmd.Parameters.AddWithValue("@description", role.description);
+                        
                         context.Open();
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                if (reader.HasRows)
-                                {
-                                    role.id = int.Parse(reader["id"].ToString());
-                                    role.role_guid = Guid.Parse(reader["role_guid"].ToString());
-                                    role.name = reader["name"].ToString();
-                                    role.description = reader["description"].ToString();
-                                }
-                            }
-                        }
+                        int rows = cmd.ExecuteNonQuery();
                         context.Close();
                     }
                 }
-                return Ok(role);
+
+                Logger.LogInfo($"Registro asociado al Rol {role.name} agregado correctamente");
+                return Ok("Rol agregado correctamente\n");
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, $"Error en método Get {Url.Action("Get", "Role")} con id: {id}");
-                return StatusCode(500);
+                Logger.LogError(ex, $"Error en metodo Post => {Url.Action("Post", "Role")}");
+                return StatusCode(500, new { Message = "Error en el envio de datos, revisar log de errores.", ErrorMessage = ex.Message });
+            }
+
+        }
+
+        [HttpPut]
+        public IActionResult Put(Role role)
+        {
+            try
+            {
+                var query = @"
+                            UPDATE [dbo].[Role]
+                            SET [name] = @name
+                               ,[description] = @description
+                            WHERE [role_guid] = @role_guid
+                            ";
+
+                using (SqlConnection context = new SqlConnection(connection))
+                {
+                    using (SqlCommand cmd = new SqlCommand(query, context))
+                    {
+                        cmd.Parameters.AddWithValue("@role_guid", role.role_guid);
+                        cmd.Parameters.AddWithValue("@name", role.name);
+                        cmd.Parameters.AddWithValue("@description", role.description);
+
+                        context.Open();
+                        int rows = cmd.ExecuteNonQuery();
+                        context.Close();
+                    }
+                }
+                Logger.LogInfo($"Registro asociado al Guid {role.role_guid} actualizado correctamente");
+                return Ok($"Registro asociado al rol {role.name} actualizado \n");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error en metodo Post => {Url.Action("Put", "Role")}");
+                return StatusCode(500, new { Message = "Error en el envio de datos, revisar log de errores.", ErrorMessage = ex.Message });
             }
         }
 
-        // POST api/<RoleController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpDelete("{Id}")]
+        public IActionResult Delete(string Id)
         {
-        }
+            try
+            {
+                string query = @"
+                                DELETE 
+                                FROM [dbo].[Role]
+                                WHERE [role_guid] = @role_guid
+                                ";
 
-        // PUT api/<RoleController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+                using (SqlConnection context = new SqlConnection(connection))
+                {
+                    using (SqlCommand cmd = new SqlCommand(query, context))
+                    {
+                        cmd.Parameters.AddWithValue("@role_guid", Id);
 
-        // DELETE api/<RoleController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+                        context.Open();
+                        int rows = cmd.ExecuteNonQuery();
+                        context.Close();
+                    }
+                }
+
+                Logger.LogInfo($"Registro asociado al Guid {Id} eliminado correctamente");
+                return Ok("Registro eliminado con exito");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error en metodo Post => {Url.Action("Put", "Role")}");
+                return StatusCode(500, new { Message = "Error en el envio de datos, revisar log de errores.", ErrorMessage = ex.Message });
+            }
+
         }
     }
 }

@@ -17,6 +17,7 @@ namespace InventaryApp.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("5.0")]
     public class RoleController : ControllerBase
     {
         private readonly IConfiguration _configuration;

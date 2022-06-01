@@ -139,7 +139,10 @@
     <value>Editar Registro</value>
   </data>
   <data name="InfoFilteredDataTable" xml:space="preserve">
-    <value>(filtrado de _MAX_ entradas totales)</value>
+    <value>(filtrado de _MAX_ registros totales)</value>
+  </data>
+  <data name="Key" xml:space="preserve">
+    <value>Llave</value>
   </data>
   <data name="Next" xml:space="preserve">
     <value>Siguiente</value>
@@ -159,11 +162,20 @@
   <data name="Search" xml:space="preserve">
     <value>Buscar</value>
   </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Configuraciones</value>
+  </data>
   <data name="ShowingRecordsDataTable" xml:space="preserve">
     <value>Mostrando _START_ a _END_ de _TOTAL_ registros</value>
   </data>
   <data name="ShowRecordsDataTable" xml:space="preserve">
     <value>Mostrar _MENU_ registros</value>
+  </data>
+  <data name="SystemConfiguration" xml:space="preserve">
+    <value>Configuraciones de Sistema</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Valor</value>
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Bienvenidos</value>

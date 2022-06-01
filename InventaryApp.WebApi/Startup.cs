@@ -29,8 +29,10 @@ namespace InventaryApp.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             //Enable Cors
-            services.AddCors(options => {
-                options.AddPolicy(CorsPolicyName, builder => {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(CorsPolicyName, builder =>
+                {
                     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
@@ -40,7 +42,7 @@ namespace InventaryApp.WebApi
                 config.DefaultApiVersion = new ApiVersion(1, 0);
                 config.AssumeDefaultVersionWhenUnspecified = true;
                 config.ReportApiVersions = true;
-                config.ApiVersionReader = new HeaderApiVersionReader("api-version");
+                //config.ApiVersionReader = new HeaderApiVersionReader("api-version");
             });
 
             services.AddSwaggerGen(c =>
@@ -55,12 +57,9 @@ namespace InventaryApp.WebApi
 
             app.UseCors(CorsPolicyName);
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "InventaryApp.WebApi v1"));
-            }
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "InventaryApp.WebApi v1"));
 
             app.UseHttpsRedirection();
 

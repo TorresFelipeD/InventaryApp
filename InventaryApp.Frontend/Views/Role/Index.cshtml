@@ -19,8 +19,8 @@
                 <i class="fas fa-plus" title="@language.GetKey("AddRecord")" data-placement="top" data-toggle="tooltip"></i>
             </a>
         </div>
-        <table id="RoleData" class="table table-striped table-bordered table-hover" data-item="Table">
-            <thead class="text-center">
+        <table id="RoleData" class="table table-bordered table-hover" data-item="Table">
+            <thead class="text-center dark-mode">
                 <tr>
                     <th scope="row">#</th>
                     <th scope="row" hidden>Guid</th>
@@ -155,7 +155,6 @@
             var data = $(dataIn);
             var Role = {};
 
-            console.log("Form is valid: " + $(data).valid());
             if ($(data).valid()) {
                 switch (actionExecution) {
                     case "update":
@@ -167,7 +166,6 @@
                             type: 'POST',
                             async: false
                         }).done(function (response) {
-                            console.log(response);
                             $(".modal").modal("hide");
                             swalCustom.fire({
                                 title: "Registro Actualizado",
@@ -178,7 +176,6 @@
                                 window.location.reload();
                             });
                         }).fail(function (response) {
-                            console.log(response);
                             swalCustom.fire({
                                 title: "Actualización Fallida",
                                 text: `Se ha presentado un error en el registro ${Role.name}.`,
@@ -194,7 +191,6 @@
                             type: 'POST',
                             async: false
                         }).done(function (response) {
-                            console.log(response);
                             $(".modal").modal("hide");
                             swalCustom.fire({
                                 title: "Registro Exitoso",
@@ -205,7 +201,6 @@
                                 window.location.reload();
                             });
                         }).fail(function (response) {
-                            console.log(response);
                             swalCustom.fire({
                                 title: "Registro Fallido",
                                 text: "Se ha presentado un error registrando el rol " + Role.name,
@@ -214,13 +209,10 @@
                         });
                         break;
                 }
-                console.log(Role);
-                console.log(JSON.stringify(Role));
             }
         }
 
         function DeleteRecord(record_guid) {
-            console.log("Elimina: " + record_guid);
             swalCustom.fire({
                 title: '¿Eliminar Registro?',
                 text: "Este cambio no se puede revertir",
@@ -230,38 +222,26 @@
                 cancelButtonText: 'Cancelar',
             }).then((result) => {
                 if (result.isConfirmed) {
-
                     $.ajax({
                         url: `@Url.Action("Delete","Role")?Role_Guid=${record_guid}`,
                             type: 'POST',
                             async: false
                     }).done(function (response) {
-                        console.log(response);
-                        $(".modal").modal("hide");
                         swalCustom.fire({
-                            title: "Registro Exitoso",
-                            text: "Se ha registrado correctamente el rol " + Role.name,
-                            icon: "success",
-                            confirmButtonText: 'OK',
-                        }).then((result) => {
+                            text: 'Registro Eliminado Correctamente.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
                             window.location.reload();
                         });
-                    }).fail(function (response) {
-                        console.log(response);
+                    }).fail(function () {
                         swalCustom.fire({
-                            title: "Registro Fallido",
-                            text: "Se ha presentado un error registrando el rol " + Role.name,
-                            icon: "error"
+                            text: 'Registro No pudo ser eliminado.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
                         });
                     });
-
-                    swalCustom.fire({
-                        text: 'Registro Eliminado Correctamente.',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        window.location.reload();
-                    });
+                    
                 }
             })
         }

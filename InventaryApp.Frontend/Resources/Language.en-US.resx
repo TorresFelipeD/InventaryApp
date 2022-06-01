@@ -141,6 +141,9 @@
   <data name="InfoFilteredDataTable" xml:space="preserve">
     <value>(filtered from _MAX_ total entries)</value>
   </data>
+  <data name="Key" xml:space="preserve">
+    <value>Key</value>
+  </data>
   <data name="Next" xml:space="preserve">
     <value>Next</value>
   </data>
@@ -159,11 +162,20 @@
   <data name="Search" xml:space="preserve">
     <value>Search</value>
   </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
   <data name="ShowingRecordsDataTable" xml:space="preserve">
     <value>Showing _START_ to _END_ from _TOTAL_ records</value>
   </data>
   <data name="ShowRecordsDataTable" xml:space="preserve">
     <value>Show _MENU_ records</value>
+  </data>
+  <data name="SystemConfiguration" xml:space="preserve">
+    <value>System Configuration</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Value</value>
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Welcome</value>

@@ -46,6 +46,12 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
+                            <a href="@Url.Action("Index","Settings")" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>@language.GetKey("SystemConfiguration")</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="@Url.Action("Index","Role")" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>@language.GetKey("Role")</p>

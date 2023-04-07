@@ -1,0 +1,124 @@
+﻿@using Microsoft.AspNetCore.Http
+@{
+    string languagePath = string.Empty;
+
+    if (Context.Request.Cookies[Context.Session.GetString("CookieCultureName")] == null
+          || Context.Request.Cookies[Context.Session.GetString("CookieCultureName")].Contains("es-CO")
+       )
+    { languagePath = "es"; }
+    else
+    { languagePath = "en"; }
+}
+@inject LanguageService language
+<!DOCTYPE html>
+<html lang="@languagePath">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] | Inventary App</title>
+
+    <link rel="shortcut icon" href="~/images/favicon.ico" />
+
+    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="~/adminlte/plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/adminlte/dist/css/adminlte.min.css">
+    <!-- flag-icon-css -->
+    <link rel="stylesheet" href="~/adminlte/plugins/flag-icon-css/css/flag-icon.min.css">
+    @*Jquery DataTable*@
+    @*<link rel="stylesheet" href="~/adminlte/plugins/datatables/css/jquery.dataTables.min.css" />*@
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <!-- Preloader -->
+        <div class="preloader flex-column justify-content-center align-items-center dark-mode">
+            <img class="animation__wobble" src="~/images/Logo2.png" alt="Logo" height="100" width="100">
+        </div>
+
+        <partial name="_Navbar" />
+        <partial name="_Sidebar" />
+        <div class="content-wrapper">
+            <div class="content p-3">
+                @RenderBody()
+            </div>
+        </div>
+        <partial name="_Footer" />
+    </div>
+
+    @*jQuery*@
+    <script src="~/adminlte/plugins/jquery/jquery.min.js"></script>
+    @*jQuery UI*@
+    <script src="~/adminlte/plugins/jquery-ui/jquery-ui.min.js"></script>
+    @*Bootstrap 4*@
+    <script src="~/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    @*AdminLTE App*@
+    <script src="~/adminlte/dist/js/adminlte.min.js"></script>
+    @*Jquery DataTable*@
+    <script src="~/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/adminlte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/adminlte/plugins/jszip/jszip.min.js"></script>
+    <script src="~/adminlte/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/adminlte/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    @*Sweet Alert 2*@
+    <script src="~/adminlte/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+    @*Scripst de Sitio*@
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+    @*JQuery Validate*@
+    <script src="~/adminlte/plugins/jquery-validation/jquery.validate.min.js"></script>
+
+    <script type="text/javascript">
+        var language = "@languagePath", languagePath;
+        switch (language) {
+            case "en":
+                languagePath = "/Resources/DataTables_English.json";
+                break;
+            default:
+                languagePath = "/Resources/DataTables_Spanish.json";
+                break;
+        }
+
+        $(document).ready(function () {
+            $("[data-item='Table']").DataTable({
+                "paging": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "language": {
+                    "url": languagePath,
+                    //"url": "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/English.json",
+                    @*search: "@language.GetKey("Search"): ",
+                    paginate: {
+                        previous: "@language.GetKey("Preview")",
+                        next: "@language.GetKey("Next")"
+                    },
+                    lengthMenu: "@language.GetKey("ShowRecordsDataTable")",
+                    info: "@language.GetKey("ShowingRecordsDataTable")",
+                    infoFiltered: "@language.GetKey("InfoFilteredDataTable")"*@
+                }
+            });
+        });
+    </script>
+    @await RenderSectionAsync("ScriptsAfter", required: false)
+</body>
+</html>

@@ -1,5 +1,5 @@
 # TITULO DEL DESIGN DOC
-Link: [Link a este design doc](#)
+Link: [Design-Doc-InventaryApp](https://github.com/TorresFelipeD/InventaryApp/blob/v0.0.0-alpha.1/docs/design-doc.md)
 
 Author(s): Diego Chaparro
 
